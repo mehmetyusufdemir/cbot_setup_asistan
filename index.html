@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBOT Kurulum Gereksinimi Asistanı</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://www.cbot.ai/wp-content/uploads/2019/01/cbot_logo.png" alt="CBOT Logo">
+        </div>
+        
+        <h1>CBOT Kurulum Gereksinimi Asistanı</h1>
+        
+        <div class="admin-access">
+            <button id="adminAccessBtn">Admin Paneli</button>
+        </div>
+        
+        <div class="mode-switcher">
+            <label title="CORS sorunu çözülene kadar demo modunu kullanın">
+                <input type="checkbox" id="demoModeToggle" checked> 
+                Demo Modu (Geliştirme)
+            </label>
+        </div>
+        
+        <form id="requirementForm">
+            <div class="section">
+                <h2>Ortam Seçimi</h2>
+                <div class="form-group">
+                    <label>Ortam Tipi:</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="envTest" name="environment" value="test" checked>
+                            <label for="envTest">Test</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="envProd" name="environment" value="prod">
+                            <label for="envProd">Canlı</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="envBoth" name="environment" value="both">
+                            <label for="envBoth">Her ikisi</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Çalışma Ortamı:</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="onPrem" name="deploymentType" value="on-prem" checked>
+                            <label for="onPrem">On-Prem</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="cloud" name="deploymentType" value="cloud">
+                            <label for="cloud">Bulut</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Ana Modül Seçimi</h2>
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleCore" name="modules" value="core" checked>
+                            <label for="moduleCore">Core</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="modulePanel" name="modules" value="panel" checked>
+                            <label for="modulePanel">Panel</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleLiveChat" name="modules" value="livechat">
+                            <label for="moduleLiveChat">LiveChat</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleFusion" name="modules" value="fusion">
+                            <label for="moduleFusion">Fusion</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleClassifier" name="modules" value="classifier">
+                            <label for="moduleClassifier">Classifier</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleAiflow" name="modules" value="aiflow">
+                            <label for="moduleAiflow">AI Flow</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moduleAnalytics" name="modules" value="analytics">
+                            <label for="moduleAnalytics">Analytics</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Yardımcı Servis Seçimi</h2>
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="serviceOCR" name="services" value="ocr">
+                            <label for="serviceOCR">OCR</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="serviceMasking" name="services" value="masking">
+                            <label for="serviceMasking">Maskeleme</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="serviceFileToMd" name="services" value="fileToMd">
+                            <label for="serviceFileToMd">File to Markdown</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="serviceCrawler" name="services" value="crawler">
+                            <label for="serviceCrawler">Crawler</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="serviceHFModel" name="services" value="hfModel">
+                            <label for="serviceHFModel">HF Model Hosting</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Veritabanı ve LDAP Ayarları</h2>
+                <div class="form-group">
+                    <label for="dbType">Veritabanı Tercihi:</label>
+                    <select id="dbType" name="dbType">
+                        <option value="mongodb">MongoDB</option>
+                        <option value="mssql">MSSQL</option>
+                        <option value="postgresql">PostgreSQL</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>LDAP Kullanılacak mı?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="ldapYes" name="ldapUsage" value="yes">
+                            <label for="ldapYes">Evet</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="ldapNo" name="ldapUsage" value="no" checked>
+                            <label for="ldapNo">Hayır</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="generateBtn">Kurulum Gereksinimlerini Oluştur</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Gereksinimler hazırlanıyor...</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <h4>Hata Oluştu</h4>
+            <p id="errorText"></p>
+            <p>Lütfen tekrar deneyin veya sistem yöneticinize başvurun.</p>
+        </div>
+        
+        <div id="result">
+            <h2>Kurulum Gereksinimleri</h2>
+            
+            <div class="result-tabs">
+                <button class="result-tab-btn active" data-result="text">Metin Dokümanı</button>
+                <button class="result-tab-btn" data-result="diagram">Sistem Mimarisi</button>
+            </div>
+            
+            <div class="result-content" id="textResultContent">
+                <div id="requirementsContent" class="requirements-content"></div>
+            </div>
+            
+            <div class="result-content" id="diagramResultContent" style="display: none;">
+                <div id="systemDiagram" class="system-diagram"></div>
+                <div class="diagram-legend">
+                    <div class="legend-item"><span class="color-box module-color"></span> Modül</div>
+                    <div class="legend-item"><span class="color-box service-color"></span> Servis</div>
+                    <div class="legend-item"><span class="color-box database-color"></span> Veritabanı</div>
+                    <div class="legend-item"><span class="color-box connection-color"></span> Bağlantı</div>
+                </div>
+            </div>
+            
+            <button id="downloadBtn">PDF Olarak İndir</button>
+        </div>
+        
+        <!-- Chat Bölümü -->
+        <div class="section chat-section" id="chatSection">
+            <h2>CBOT Asistanı ile Sohbet</h2>
+            <div class="document-upload">
+                <h3>Kural Dokümanı Yükle</h3>
+                <textarea id="rulesDocument" placeholder="Kural dokümanınızı buraya yapıştırın..." rows="5"></textarea>
+                <button id="saveRulesBtn">Kuralları Kaydet</button>
+                <div id="rulesStatus"></div>
+            </div>
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        Merhaba! CBOT kurulum gereksinimleri hakkında sorularınızı yanıtlamak için buradayım. Size nasıl yardımcı olabilirim?
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Kurulum ile ilgili sorunuzu yazın...">
+                    <button id="sendBtn">Gönder</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Paneli Bölümü -->
+        <div class="section admin-section" id="adminSection">
+            <h2>CBOT Admin Paneli</h2>
+            
+            <div class="admin-login">
+                <input type="password" id="adminPassword" placeholder="Admin şifresi">
+                <button id="adminLoginBtn">Giriş</button>
+            </div>
+            
+            <div class="admin-panel" id="adminPanelContent" style="display: none;">
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" data-tab="modulesTab">Modüller</button>
+                    <button class="admin-tab-btn" data-tab="databasesTab">Veritabanları</button>
+                    <button class="admin-tab-btn" data-tab="servicesTab">Servisler</button>
+                    <button class="admin-tab-btn" data-tab="rulesTab">Kurallar</button>
+                </div>
+                
+                <div class="admin-tab-content" id="modulesTab">
+                    <h3>Modül Yönetimi</h3>
+                    <div class="admin-list" id="modulesList">
+                        <!-- Mevcut modüller burada listelenecek -->
+                    </div>
+                    <div class="admin-add-form">
+                        <input type="text" id="newModuleName" placeholder="Yeni modül adı">
+                        <input type="text" id="newModuleResourceCPU" placeholder="CPU gereksinimi">
+                        <input type="text" id="newModuleResourceRAM" placeholder="RAM gereksinimi">
+                        <input type="text" id="newModuleResourceDisk" placeholder="Disk gereksinimi">
+                        <button id="addModuleBtn">Modül Ekle</button>
+                    </div>
+                </div>
+                
+                <div class="admin-tab-content" id="databasesTab" style="display: none;">
+                    <h3>Veritabanı Yönetimi</h3>
+                    <div class="admin-list" id="databasesList">
+                        <!-- Mevcut veritabanları burada listelenecek -->
+                    </div>
+                    <div class="admin-add-form">
+                        <input type="text" id="newDBName" placeholder="Yeni veritabanı adı">
+                        <input type="text" id="newDBPort" placeholder="Port numarası">
+                        <input type="text" id="newDBCollation" placeholder="Collation (isteğe bağlı)">
+                        <button id="addDBBtn">Veritabanı Ekle</button>
+                    </div>
+                </div>
+                
+                <div class="admin-tab-content" id="servicesTab" style="display: none;">
+                    <h3>Servis Yönetimi</h3>
+                    <div class="admin-list" id="servicesList">
+                        <!-- Mevcut servisler burada listelenecek -->
+                    </div>
+                    <div class="admin-add-form">
+                        <input type="text" id="newServiceName" placeholder="Yeni servis adı">
+                        <input type="text" id="newServiceResourceCPU" placeholder="CPU gereksinimi">
+                        <input type="text" id="newServiceResourceRAM" placeholder="RAM gereksinimi">
+                        <input type="checkbox" id="newServiceRequiresGPU">
+                        <label for="newServiceRequiresGPU">GPU gerektirir</label>
+                        <button id="addServiceBtn">Servis Ekle</button>
+                    </div>
+                </div>
+                
+                <div class="admin-tab-content" id="rulesTab" style="display: none;">
+                    <h3>Kural Yönetimi</h3>
+                    
+                    <div class="rule-tabs">
+                        <button class="rule-tab-btn active" data-ruletype="text">Metin Kuralları</button>
+                        <button class="rule-tab-btn" data-ruletype="visual">Görsel Kural Oluşturucu</button>
+                    </div>
+                    
+                    <div class="rule-content" id="textRuleContent">
+                        <textarea id="systemRules" rows="15" placeholder="Sistem kurallarını düzenleyin..."></textarea>
+                        <div class="rule-buttons">
+                            <button id="saveRulesBtn">Kuralları Kaydet</button>
+                            <button id="downloadRulesBtn">Kuralları İndir</button>
+                            <button id="uploadRulesBtn">Kuralları Yükle</button>
+                            <input type="file" id="rulesFileInput" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="rule-content" id="visualRuleContent" style="display: none;">
+                        <div class="rule-builder">
+                            <h4>Yeni Kural Oluştur</h4>
+                            
+                            <div class="rule-condition">
+                                <div class="rule-if-condition">
+                                    <span>EĞER</span>
+                                    <select id="ruleConditionType">
+                                        <option value="module">Modül</option>
+                                        <option value="service">Servis</option>
+                                        <option value="database">Veritabanı</option>
+                                    </select>
+                                    <select id="ruleConditionOperator">
+                                        <option value="selected">seçilirse</option>
+                                        <option value="notSelected">seçilmezse</option>
+                                    </select>
+                                    <select id="ruleConditionValue"></select>
+                                </div>
+                                
+                                <div class="rule-then-action">
+                                    <span>ŞUNU YAP</span>
+                                    <select id="ruleActionType">
+                                        <option value="warn">Uyarı Göster</option>
+                                        <option value="require">Zorunlu Tut</option>
+                                        <option value="disable">Devre Dışı Bırak</option>
+                                    </select>
+                                    
+                                    <div id="ruleTargetContainer">
+                                        <select id="ruleTargetType">
+                                            <option value="module">Modül</option>
+                                            <option value="service">Servis</option>
+                                            <option value="database">Veritabanı</option>
+                                        </select>
+                                        <select id="ruleTargetValue"></select>
+                                    </div>
+                                    
+                                    <div id="ruleMessageContainer" style="display: none;">
+                                        <input type="text" id="ruleWarningMessage" placeholder="Uyarı mesajı...">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button id="addRuleBtn">Kural Ekle</button>
+                        </div>
+                        
+                        <div class="custom-rules-list">
+                            <h4>Tanımlı Kurallar</h4>
+                            <div id="customRulesList">
+                                <!-- Tanımlı kurallar burada listelenecek -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
